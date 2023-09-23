@@ -75,6 +75,7 @@ class Cat extends Animal {
 }
 ```
 
+_(super is essentially the "parent" class. In this case, Animal.)_
 ### Problem 3:
 
 ```Java
