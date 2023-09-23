@@ -96,21 +96,20 @@ class B extends A {
 }
 ```
 
-Analyze the output of the following statements:
+Analyze the following. What is the output? Explain:
 
 ```Java
 A obj1 = new B();
 obj1.display();
 ((B)obj1).print();
 ```
-
-**Expected Output**:
-```
-Class B
-Class B
-```
-
 ##### Solution:
+**Output**:
+```
+Class B
+Class B
+```
+
 `A obj1 = new B();`
 Here, we're creating an instance of `B` but the reference type is `A`. This means `obj1` is an instance of `B` but is being referred to as an instance of `A`.
 
@@ -145,12 +144,14 @@ class Circle extends Shape {
 }
 ```
 
-Analyze the output for the following:
+Analyze the following. What is the output? Explain:
 ```Java
 Shape shape1 = new Circle();
 shape1.draw();
 shape1.draw("triangle");
 ```
+
+##### Solution:
 
 Output:
 ```
@@ -158,7 +159,7 @@ Drawing a circle
 Drawing a triangle
 ```
 
-##### Solution:
+
 `Shape shape1 = new Circle();`
 Here, `shape1` is a reference of type `Shape`, but it's pointing to an instance of `Circle`. In other words, the reference type is `Shape`, but the object it refers to is of type `Circle`.
 
