@@ -64,7 +64,7 @@ class Dog extends Animal {
         System.out.println("Dog barks");
     }
     void parentSound(){
-	    super.sound();
+		super.sound();
     }
 }
 
