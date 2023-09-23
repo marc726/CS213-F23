@@ -121,6 +121,10 @@ The method `display()` is called on `obj1`. Even though the reference type is `A
 
 _(again refer back to the animal ref type but dog instance)_
 
+`((B)obj1).print();`
+Here, we're explicitly casting `obj1` to type `B` and calling the `print()` method which is defined only in `B`. The `print()` method internally calls `display()`, which again due to dynamic binding calls the method in `B`. Thus, the output is:
+`Class B`
+
 ### Problem 4:
 
 ```Java
