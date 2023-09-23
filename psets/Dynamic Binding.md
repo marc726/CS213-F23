@@ -59,18 +59,12 @@ class B extends A {
 }
 ```
 
-Analyze the output of the following statements:
+Analyze the following. What is the output? Explain:
 
 ```Java
 A obj1 = new B();
 obj1.display();
 ((B)obj1).print();
-```
-
-**Expected Output**:
-```
-Class B
-Class B
 ```
 
 ### Problem 4: Overriding vs Overloading
@@ -93,15 +87,9 @@ class Circle extends Shape {
 }
 ```
 
-Analyze the output for the following:
+Analyze the following. What is the output? Explain:
 ```Java
 Shape shape1 = new Circle();
 shape1.draw();
 shape1.draw("triangle");
-```
-
-Output:
-```
-Drawing a circle
-Drawing a triangle
 ```
