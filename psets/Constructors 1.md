@@ -31,7 +31,6 @@ b. Explain the difference between a no-arg constructor and a default constructor
 ### **Multiple Constructors and `this()`:**
 
 a. Given the Point class:
-
 ```Java
 public class Point {
     int x, y;
