@@ -3,7 +3,7 @@
 
 a. True or False: A constructor creates an object.
 
-b. Fill in the blanks: In the statement `new X()`, `new X` ________ and `X()` ________.
+b. Fill in the blanks: In the statement `new X()`, `new X`  ------- and `X()` ---------.
 
 c. True or False: When an object is created with `new`, its fields are initialized to their intrinsic default values before the constructor is called.
 
