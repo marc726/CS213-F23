@@ -52,7 +52,14 @@ public class ColoredPoint extends Point {
 
 a) **True/False**: In Java, multiple inheritance is supported through the use of interfaces.
 
+##### Solution: 
+True  
+**Explanation**: Java doesn't support multiple inheritance through classes to avoid the diamond problem. However, it does support multiple inheritance through interfaces, where a class can implement multiple interfaces.
+
+
+
 b) **MCQ**: What will be the output of the following code?
+
 
 ```Java
 class A {
