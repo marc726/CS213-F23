@@ -3,22 +3,14 @@
 
 a) **True/False**: Every class in Java is directly or indirectly derived from the Object class.
 
-##### Solution
-True  
-	**Explanation**: In Java, if a class doesn’t extend any other class then it is directly derived from the `Object` class. If it extends another class, it is indirectly derived from the `Object` class because the parent class itself will be derived from `Object`.
-
-
 b) **MCQ**: Which keyword is used to inherit a class in Java? 
 	a) `implements` 
 	b) `inherits` 
 	c) `extends` 
 	d) `derived`
 
-##### Solution
-c) `extends`  
-    **Explanation**: In Java, the `extends` keyword is used to inherit properties and behaviors (methods) from another class.
-
 ### Coding
+
 Given the class `Point` defined as:
 
 ```Java
@@ -28,38 +20,15 @@ public class Point {
 ```
 
 a. Write a derived class `ColoredPoint` that adds an instance variable `color` of type `String` to represent the color of the point.
-##### Solution:
-```Java
-public class ColoredPoint extends Point {
-    String color;
-}
-```
 
 b. Extend the `ColoredPoint` class to add a method `display()` that prints the x, y coordinates and the color of the point.
-##### Solution:
-```Java
-public class ColoredPoint extends Point {
-    String color;
-
-    public void display() {
-        System.out.println("Coordinates: (" + x + "," + y + ") Color: " + color);
-    }
-}
-```
 
 ### Advanced Concepts
 
 
 a) **True/False**: In Java, multiple inheritance is supported through the use of interfaces.
 
-##### Solution: 
-True  
-**Explanation**: Java doesn't support multiple inheritance through classes to avoid the diamond problem. However, it does support multiple inheritance through interfaces, where a class can implement multiple interfaces.
-
-
-
 b) **MCQ**: What will be the output of the following code?
-
 
 ```Java
 class A {
@@ -94,6 +63,45 @@ a) Consider a basic e-commerce application. Create an abstract class `Product` w
 
 b) Explain the concept of dynamic method dispatch in Java with a suitable example.
 
-### Challenge Problem
+### Polymorphism
 
-Implement a class hierarchy representing geometric shapes. Start with an abstract class `Shape` with methods `area()` and `perimeter()`. Extend this class to create classes like `Circle`, `Rectangle`, and `Triangle`. Implement the area and perimeter methods for each derived class. Create a driver class to test and display the area and perimeter of each shape.
+1) **True/False**: Polymorphism allows us to perform a single action in different ways.
+
+
+2) **MCQ**: Which concept in Java is the essence of polymorphism? 
+	a) Overloading 
+	b) Overriding 
+	c) Hiding 
+	d) Encapsulation
+
+
+
+3) Consider the following code:
+```Java
+class Vehicle {
+    void run() {
+        System.out.println("Vehicle is running");
+    }
+}
+
+class Bike extends Vehicle {
+    void run() {
+        System.out.println("Bike is running safely");
+    }
+}
+
+public class TestPolymorphism {
+    public static void main(String[] args) {
+        Vehicle v = new Bike();
+        v.run();
+    }
+}
+```
+
+What will be the output when `TestPolymorphism` is executed?
+
+
+4) **True/False**: Overloading is an example of runtime polymorphism.
+
+
+5) Differentiate between compile-time and runtime polymorphism with suitable examples.
