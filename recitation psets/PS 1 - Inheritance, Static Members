@@ -1,0 +1,277 @@
+<html><head>
+<title>Problem Set 1</title>
+<style>
+body { font: 14px Trebuchet MS; }
+pre { color: blue; }
+code,tt { color: blue; }
+a, a:active { color: blue; }
+</style>
+</head><body>
+<center><h2>Problem Set 1</h2></center>
+<center><h3>Inheritance, Static Members</h3></center>
+<hr>
+<ol>
+<li><p>Consider the following class definition:
+</p><blockquote>
+<pre>   public class A {
+      public A () {}
+      public A (int a, int b) {}
+   }
+
+   public class B extends A {
+        public B (int r) {}
+        public B (int r, int w) { 
+           super (r, w);
+        }
+   }
+</pre>
+</blockquote>
+<p>Which of the following are legitimate calls to construct instances of the B class?
+For those that are not, explain why.
+</p><ol style="list-style-type: lower-alpha;">
+<li> <tt>B c = new B();</tt>
+</li><li> <tt>A s = new B(1);</tt>
+</li><li> <tt>B c = new B(1, 9);</tt>
+</li><li> <tt>A t = new B(1, 9, 4);</tt>
+</li><li> <tt>B t = (new B(1)).new B(1);</tt>
+</li><li> <tt>B b = new A(1, 2);</tt>
+</li></ol>
+<hr>
+<li>Inheritance/Dynamic Binding
+<p>
+</p><ol style="list-style-type: lower-alpha;">
+<li>Will the following code compile? If not, where exactly will it fail
+to compile?
+
+<pre>  public class A {
+    public int x;
+    public A(int x) {
+      this.x = x;
+    } 
+  }
+
+  public class B extends A {
+    public int y;
+    public B(int y) {
+      this.y = y;
+    }
+  }
+</pre>
+
+</li><li>Given:
+<pre>  public class B {
+    public int x;
+    public String toString() {
+       return x + "";
+    }
+  }
+
+  public class E extends B {
+    public int y=3;
+    public String toString() {
+       return (x + y) + "";
+    }
+  }
+</pre>
+What is the output of the following code segment:
+<pre>  B b = new E(); 
+  b.x = 5;
+  System.out.println(b);
+</pre>
+</li><li>Given:
+<pre>  public class B {
+    private int x;
+    public int getX() {
+       return x;
+    }
+    public String toString() {
+       return x + "";
+    }
+  }
+
+  public class E extends B {
+    public int y=3;
+    public String toString() {
+       return getX() + y + "";
+    }
+  }
+</pre>
+What is the output of the following code segment, which is 
+in a different class than B or E:
+<pre>  B b = new E(); 
+  System.out.println(b)
+</pre>
+</li><li>Given:
+<pre>  public class V {
+    public static int stuff() {
+       return 1;
+    }
+  }
+
+  public class W extends V {
+    public static int stuff() {
+       return 2;
+    }
+  }
+</pre>
+What is the output of the following code segment, which is 
+in a different class than W or V:
+<pre>  V v = new W(); 
+  System.out.println(v.stuff());
+</pre>
+</li><li>Given:
+<pre>  public class G {
+     public int g;
+  }
+
+  public class H extends G {
+     public int h;
+     public boolean equals(Object o) {
+        if (o == null || !(o instanceof H)) { 
+           return false; 
+        }
+        return g == ((H)o).g;
+     }
+  }
+</pre>
+What is the output of the following code segment, which is 
+in a different class than H or G:
+<pre>  G ag = new H(); ag.g = 15;
+  G bg = new G(); bg.g = 15;
+  if (ag.equals(bg)) {
+     System.out.println(10);
+  } else {
+     System.out.println(20);
+  }
+</pre>
+</li><li>Given:
+<pre>  public class B {
+    public int x;
+    public String toString() {
+       return x + "";
+    }
+  }
+
+  public class E extends B {
+    public int y=3;
+    public String toString() {
+       return (x + y) + "";
+    }
+  }
+</pre>
+What is the output of the following code segment, which is 
+in a different class than B or E:
+<pre>  B b = new E(); 
+  System.out.println(b.y)
+</pre>
+</li></ol>
+<hr>
+</li><li><p>What is the output of this code? Why?
+</p><pre>   class GrandParent { }
+   class Parent extends GrandParent{ }
+   class Child extends Parent { }
+
+   class Foo {
+      public void bar(GrandParent p) {
+         System.out.println("called with type GrandParent");
+      }
+      public void bar(Parent p) {
+         System.out.println("called with type Parent");
+      }
+   }
+
+   public class Test {
+      public static void main(String[] args) {
+         new Foo().bar(new Child());
+      }
+   }
+</pre>
+<hr>
+</li><li><p>In this exercise we will try to see how static and final 
+methods work with inheritance.&nbsp; (A final method is one that
+cannot be overridden in a subclass.) Consider the two 
+classes defined below, <code>Parent</code> and <code>Child</code>:
+</p><pre>   public class Parent {
+      /*
+       public static final void printClassName() {
+          System.out.println("I am in class Parent, static invocation.");
+       }
+      */
+
+       public final void printName() {
+          System.out.println("I am in class Parent, dynamic invocation.");
+       }
+   }
+
+   public class Child extends Parent {
+      /*
+       public static void printClassName() {
+          System.out.println("I am in class Child, static invocation.");
+       }
+      */
+
+       public void printName() {
+          System.out.println("I am in class Child, dynamic invocation.");
+       }
+   }
+</pre>
+<ol style="list-style-type: upper-alpha">
+<li>Compile both the classes.&nbsp; What do you see?
+</li><li>Now comment out the <code>printName()</code> method 
+in the <tt>Child</tt> class and uncomment the 
+<code>printClassName()</code> method in both 
+classes.&nbsp; Compile both classes.&nbsp; What do you
+see?&nbsp; Is it different from part (A)?&nbsp; Why?
+</li><li>Uncomment the <code>Child.printName()</code> method 
+and remove the <code>final</code> modifier from 
+
+<code>Parent.printName()</code> and
+<code>Parent.printClassName()</code>.&nbsp;
+Recompile both classes.
+</li><li>Compile and run the following class:
+<pre>   class App {
+      public static void main(String[] args) {
+         Parent p = new Child();
+         p.printName();      // WHAT IS PRINTED?
+         p.printClassName(); // WHAT IS PRINTED? 
+      }
+   }
+</pre>
+Explain the difference in <em>which</em> methods are invoked in
+these two method calls.
+</li></ol>
+<hr>
+</li><li>Here's a <tt>Widget</tt> class:
+<pre>  public class Widget {
+     float mass;  
+
+     private static float MAX_MASS = 20;
+
+     public static final float G = 9.81f;    
+
+     public Widget(float mass) {
+        if (mass &gt; MAX_MASS) {
+           throw new IllegalArgumentException();
+        }
+        this.mass = mass;
+     }
+
+     public static float getMaxMass() {
+        return MAX_MASS;
+     }
+
+     public float getWeight() {
+        return mass*G;
+     }
+  }
+</pre>
+Now suppose there is a certain set of widgets that are "heavy", so their
+maximum mass is 40 instead of the usual 20. Write a class called
+<tt>HeavyWidget</tt>, as a subclass of <tt>Widget</tt>. Do you encounter any
+implementation issues when you do this? Can you get around these issues?
+If so, show how. If not, explain why.
+
+</li></ol>
+
+
+</body></html>

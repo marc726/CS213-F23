@@ -1,0 +1,456 @@
+<html><head>
+<title>Problem Set 1 Solution</title>
+<style>
+body { font: 14px Trebuchet MS; }
+pre { color: blue; }
+code,tt { color: blue; }
+a, a:active { color: blue; }
+</style>
+</head><body>
+<center><h2>Problem Set 1 - Solution</h2></center>
+<center><h3>Inheritance, Static Members</h3></center>
+<hr>
+<ol>
+<li><p>Consider the following class definition:
+</p><blockquote>
+<pre>   public class A {
+      public A () {}
+      public A (int a, int b) {}
+   }
+
+   public class B extends A {
+        public B (int r) {}
+        public B (int r, int w) { 
+           super (r, w);
+        }
+   }
+</pre>
+</blockquote>
+<p>Which of the following are legitimate calls to construct instances of the B class?
+For those that are not, explain why.
+</p><ol style="list-style-type: lower-alpha;">
+<li> <tt>B c = new B();</tt>
+</li><li> <tt>A s = new B(1);</tt>
+</li><li> <tt>B c = new B(1, 9);</tt>
+</li><li> <tt>A t = new B(1, 9, 4);</tt>
+</li><li> <tt>B t = (new B(1)).new B(1);</tt>
+</li><li> <tt>B b = new A(1, 2);</tt>
+</li></ol>
+<p><b>SOLUTION</b>
+</p><p>
+</p><ol style="list-style-type: lower-alpha;">
+<li>Invalid - <code>B</code> does not have a no-arg constructor
+</li><li>Valid
+</li><li>Valid
+</li><li>Invalid - no 3-argument constructor defined
+</li><li>Invalid - gibberish
+</li><li>Invalid - b is of static type B, and cannot refer to object of dynamic type A since A is
+not a subclass of B
+</li></ol>
+<hr>
+<li>Inheritance/Dynamic Binding
+<p>
+</p><ol style="list-style-type: lower-alpha;">
+<li>Will the following code compile? If not, where exactly will it fail
+to compile?
+
+<pre>  public class A {
+    public int x;
+    public A(int x) {
+      this.x = x;
+    } 
+  }
+
+  public class B extends A {
+    public int y;
+    public B(int y) {
+      this.y = y;
+    }
+  }
+</pre>
+<p><b>ANSWER</b>: 
+</p><p> The class B will not compile. The error is 
+that the constructor B(int y) implicitly 
+calls the constructor A(), which does not exist.  Constructors of subclasses must 
+call, explicitly or implicitly, a valid constructor of the superclass (or transitively,
+through a call to another constructor in the same class),
+<font color=red>before any other statement in the method</font>.
+
+</p></li><li>Given:
+<pre>  public class B {
+    public int x;
+    public String toString() {
+       return x + "";
+    }
+  }
+
+  public class E extends B {
+    public int y=3;
+    public String toString() {
+       return (x + y) + "";
+    }
+  }
+</pre>
+What is the output of the following code segment:
+<pre>  B b = new E(); 
+  b.x = 5;
+  System.out.println(b);
+</pre>
+<p><b>ANSWER</b>: 
+</p><p> Output: 8
+<p>With dynamic binding, the version of toString() in E is called.
+</p></li><li>Given:
+<pre>  public class B {
+    private int x;
+    public int getX() {
+       return x;
+    }
+    public String toString() {
+       return x + "";
+    }
+  }
+
+  public class E extends B {
+    public int y=3;
+    public String toString() {
+       return getX() + y + "";
+    }
+  }
+</pre>
+What is the output of the following code segment, which is 
+in a different class than B or E:
+<pre>  B b = new E(); 
+  System.out.println(b);
+</pre>
+<p><b>ANSWER</b>: 
+</p><p>Output: 3<br>
+<ol>
+<li>When an instance of E is created in the first statement above (before any constructor
+is called to initialize the object), its inherited field x gets a value of 0 by default,
+and its field y is explicitly set to 3
+<li>E does not have an explicit constructor, so the default constructor comes into
+play, which is called in the first statement above to initialize a new E
+object. 
+<li>The default constructor implictly calls super() on superclass B
+<li>Since B does not explicitly define a constructor, again its default constructor
+comes into play, which does no initialization. This means the inherited x in E
+retains its default value of 0 set at object creation time
+<li>In the second, println statement, the toString() version of E is called,
+by dynamic binding, which returns 0 (for getX()) + 3 (for y)
+</ol>
+
+</p></li><li>Given:
+<pre>  public class V {
+    public static int stuff() {
+       return 1;
+    }
+  }
+
+  public class W extends V {
+    public static int stuff() {
+       return 2;
+    }
+  }
+</pre>
+What is the output of the following code segment, which is 
+in a different class than W or V:
+<pre>  V v = new W(); 
+  System.out.println(v.stuff());
+</pre>
+<p><b>ANSWER</b>: 
+</p><p>Output: 1
+<p>Since stuff() is static, dynamic binding is not done when it is called.
+Since the call is via v, whose static (compile time) type is V, the V version
+of stuff() is called, even though v refers to a W instance.
+</p></li><li>Given:
+<pre>  public class G {
+     public int g;
+  }
+
+  public class H extends G {
+     public int h;
+     public boolean equals(Object o) {
+        if (o == null || !(o instanceof H)) { 
+           return false; 
+        }
+        return g == ((H)o).g;
+     }
+  }
+</pre>
+What is the output of the following code segment, which is 
+in a different class than H or G:
+<pre>  G ag = new H(); ag.g = 15;
+  G bg = new G(); bg.g = 15;
+  if (ag.equals(bg)) {
+     System.out.println(10);
+  } else {
+     System.out.println(20);
+  }
+</pre>
+<p><b>ANSWER</b>: 
+</p><p>Output: 20
+<ol>
+<li>ag.equals(bg) ends up calling the H version of equals by dynamic binding
+<li>Which checks if object bg is of type H. bg is not, so 
+this check fails and so equals(bg) returns false, and 20 is printed
+</ol>
+</p></li><li>Given:
+<pre>  public class B {
+    public int x;
+    public String toString() {
+       return x + "";
+    }
+  }
+
+  public class E extends B {
+    public int y=3;
+    public String toString() {
+       return (x + y) + "";
+    }
+  }
+</pre>
+What is the output of the following code segment, which is 
+in a different class than B or E:
+<pre>  B b = new E(); 
+  System.out.println(b.y);
+</pre>
+<p><b>ANSWER</b>: 
+</p><p>Compile error.
+<p>The compiler sees the statement b.y, and will pass it if there is
+a y field in class B, since b is of static type B. Since B does not
+have a y field, the compiler flags an error.
+</p></li></ol>
+<hr>
+</li><li><p>What is the output of this code? Why?
+</p><pre>   class GrandParent { }
+   class Parent extends GrandParent{ }
+   class Child extends Parent { }
+
+   class Foo {
+      public void bar(GrandParent p) {
+         System.out.println("called with type GrandParent");
+      }
+      public void bar(Parent p) {
+         System.out.println("called with type Parent");
+      }
+   }
+
+   public class Test {
+      public static void main(String[] args) {
+         new Foo().bar(new Child());
+      }
+   }
+</pre>
+<p><b>SOLUTION</b>
+</p><p>The output is:<br>
+</p><pre>     <tt>called with type Parent</tt>
+</pre>
+The method call matches the argument type (<tt>Child</tt>) with the closest matching 
+parameter type (<tt>Parent</tt>). "Closest" means either the same type, or the
+nearest matching type when going up the object ancestry following the chain of
+superclasses, toward the ultimate ancestor, <tt>Object</tt>. Since 
+<tt>Parent</tt> is the immediate superclass of <tt>Child</tt>,
+the method <tt>Foo.bar(Parent)</tt> is called.
+</li>
+<hr>
+</li><li><p>In this exercise we will try to see how static and final 
+methods work with inheritance.&nbsp; (A final method is one that
+cannot be overridden in a subclass.) Consider the two 
+classes defined below, <code>Parent</code> and <code>Child</code>:
+</p><pre>   public class Parent {
+      /*
+       public static final void printClassName() {
+          System.out.println("I am in class Parent, static invocation.");
+       }
+      */
+
+       public final void printName() {
+          System.out.println("I am in class Parent, dynamic invocation.");
+       }
+   }
+
+   public class Child extends Parent {
+      /*
+       public static void printClassName() {
+          System.out.println("I am in class Child, static invocation.");
+       }
+      */
+
+       public void printName() {
+          System.out.println("I am in class Child, dynamic invocation.");
+       }
+   }
+</pre>
+<ol style="list-style-type: upper-alpha">
+<li>Compile both the classes.&nbsp; What do you see?
+</li><li>Now comment out the <code>printName()</code> method 
+in the <tt>Child</tt> class and uncomment the 
+<code>printClassName()</code> method in both 
+classes.&nbsp; Compile both classes.&nbsp; What do you
+see?&nbsp; Is it different from part (A)?&nbsp; Why?
+</li><li>Uncomment the <code>Child.printName()</code> method 
+and remove the <code>final</code> modifier from 
+
+<code>Parent.printName()</code> and
+<code>Parent.printClassName()</code>.&nbsp;
+Recompile both classes.
+</li><li>Compile and run the following class:
+<pre>   class App {
+      public static void main(String[] args) {
+         Parent p = new Child();
+         p.printName();      // WHAT IS PRINTED?
+         p.printClassName(); // WHAT IS PRINTED? 
+      }
+   }
+</pre>
+Explain the difference in <em>which</em> methods are invoked in
+these two method calls.
+</li></ol>
+<p><b>SOLUTION</b>
+</p><p>
+</p><ol style="list-style-type: upper-alpha">
+                    <li>
+                        <p>Compiling the classes results in the Java compiler
+                            printing the following error message:
+                            </p><pre>1. ERROR in Child.java (at line 10)
+public void printName()
+            ^^^^^^^^^^^
+Cannot override the final method from Parent</pre>
+                        <p></p>
+                    </li>
+                    <li>
+
+                        <p>Compiling the classes results in the Java compiler
+                            printing the following error message:
+                            </p><pre>1. ERROR in Child.java (at line 3)
+public static void printClassName()
+                   ^^^^^^^^^^^^^^^^
+Cannot override the final method from Parent</pre>
+
+                            It is different from part (A), but in essence it
+                            is the same error: trying to override a
+                            <code>final</code> method in a subclass.
+                        <p></p>
+                    </li>
+                    <li>
+                        <p>It compiles successfully.</p>
+
+                    </li>
+
+                    <li>
+                        <p>The <code>App.java</code> program compiles, but
+                            the compiler issues a warning because
+                            <code>printClassName()</code> should be invoked
+                            on the class, not on an instance.&nbsp; The
+                            <code>printName()</code> call invokes the
+                            <code>Child</code> class's implementation because
+                            <code>p</code> refers to an instance of 
+                            <code>Child</code>.&nbsp; The 
+                            <code>printClassName()</code> call invokes the
+                            <code>Parent</code> class's implementation because
+                            <code>p</code> is a reference of type
+                            <code>Parent</code>.
+                        </p>
+
+                    </li>
+                </ol>
+<hr>
+
+</li><li>Here's a <tt>Widget</tt> class:
+<pre>  public class Widget {
+     float mass;  
+
+     private static float MAX_MASS = 20;
+
+     public static final float G = 9.81f;    
+
+     public Widget(float mass) {
+        if (mass &gt; MAX_MASS) {
+           throw new IllegalArgumentException();
+        }
+        this.mass = mass;
+     }
+
+     public static float getMaxMass() {
+        return MAX_MASS;
+     }
+
+     public float getWeight() {
+        return mass*G;
+     }
+  }
+</pre>
+Now suppose there is a certain set of widgets that are "heavy", so their
+maximum mass is 40 instead of the usual 20. Write a class called
+<tt>HeavyWidget</tt>, as a subclass of <tt>Widget</tt>. Do you encounter any
+implementation issues when you do this? Can you get around these issues?
+If so, show how. If not, explain why.
+
+<p><b>SOLUTION</b>
+</p><p>
+Here's the try to implement <tt>HeavyWeight</tt>:
+</p><pre>    public class HeavyWidget extends Widget {
+    
+       private static float MAX_MASS = 40;
+    
+       public HeavyWidget(float mass) {
+           super(mass);
+           if (mass &gt; MAX_MASS) {
+              throw new IllegalArgumentException();
+           }
+           this.mass = mass;
+       }
+       ...
+</pre>
+The problem is the call <tt>super(mass)</tt> in the constructor. 
+This call needs to be made
+because the first statement in a subclass constructor must be a call to a 
+superclass constructor. Since there is only one constructor in the superclass
+<tt>Widget</tt>, which accepts a float parameter, we have no choice but to
+write in the <tt>super(mass)</tt> call.
+However, the <tt>Widget</tt> constructor would throw an exception if the
+mass exceeds 20, even though <tt>HeavyWeight</tt> allows mass to be as much
+as 40. So this is an issue. 
+
+<p>We can try to get around the issue by putting in a try-catch like this:
+</p><pre>public HeavyWidget(float mass) {
+   try {
+     super(mass);
+   } catch (IllegalArgumentException e) {
+
+   }
+   if (mass &gt; MAX_MASS) {
+      throw new IllegalArgumentException();
+   }
+   this.mass = mass;
+}
+</pre>
+But this does not compile because <tt>try</tt> is now taken to be
+the first statement, which makes the compiler throw in a <tt>super()</tt>
+call <em>before</em> the <tt>try</tt>. And the compiler complains that
+there isn't a no-arg constructor in the <tt>Widget</tt> class. Also, it
+complains that the <tt>super(mass)</tt> statement is not the first statement.
+
+<p>The fact that this issue doesn't have a meaningful workaround suggests that there
+may be some flaw in the design. (You can try to hack your way through this by
+sending a fake argument to the superclass constructor that is bound to pass, but
+when you do this, ask yourself if you are truly solving the problem, or band-aiding
+the issue.)
+
+<p>In particular, making <tt>HeavyWidget</tt> a subclass
+of <tt>Widget</tt> implies that EVERY heavy widget is a widget. (Along the lines
+of every student is a person, or every tiger is an animal). But is this true?
+
+</p><p>If it were true, then EVERY heavy widget must pass the widget test. Which won't
+happen for all heavy widgets that have mass greater than 20. So it must be that
+every heavy widget is NOT a widget.
+
+</p><p>So then, could we flip it around, and ask whether EVERY widget is a
+heavy widget? In other words, if you were to make
+<tt>Widget</tt> a subclass of <tt>HeavyWidget</tt>, could you come up with
+clean code that works? Or is it that neither of them can be a subclass of the
+other?
+</p></li></ol>
+
+
+</body></html>

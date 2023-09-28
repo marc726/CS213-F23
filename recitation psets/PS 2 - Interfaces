@@ -1,0 +1,178 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>Problem Set 2</title>
+<style>
+body { font: 14px Trebuchet MS; }
+pre { color: blue; }
+tt { color: blue; }
+a, a:active, a:visited { color: blue; }
+</style>
+</head><body>
+<center><h2>Problem Set 2</h2></center>
+<center><h3>Interfaces</h3></center>
+<hr>
+<ol>
+<li>Short questions
+<ol>
+<p><li>Will the following code compile?
+<pre>
+public class D { }
+
+public class C implements Comparable&lt;D> {
+   public int compareTo(D o) { return 0; }
+}
+</pre>
+<li>Will the following code compile?
+<pre>
+public class D { }
+
+public class C implements Comparable&lt;C>, Comparable&lt;D> {
+   public int compareTo(C o) { return 0; }
+   public int compareTo(D o) { return 0; }
+}
+</pre>
+<li>Will the following code compile?
+<pre>
+public class A implements Comparable&lt;A> {
+   public int compareTo(A o) { return 0; }
+}
+
+public class B extends A implements Comparable&lt;B> {
+   public int compareTo(B b) { return 0; }
+}
+</pre>
+<li>Will the following code compile?
+<pre>
+public interface I { void stuff(); }
+public interface J { void stuff(); }
+public class F implements I,J { }
+</pre>
+<li>Will the following code compile?
+<pre>
+public interface I { void stuff(); }
+public interface J { void stuff(); }
+public class F implements I,J { public void stuff() { } }
+</pre>
+<li>Will the following code compile?
+<pre>
+public interface I { int stuff(); }
+public interface J { void stuff(); }
+public class F implements I,J { public int stuff() { return 3;} }
+</pre>
+<li>Will the following code compile?
+<pre>
+class X implements Comparable&lt;X> {
+    public int compareTo(X o) { 
+        return 0;
+    }
+}
+public class Searcher {
+  
+    public static &lt;T extends Comparable&lt;T>> 
+    boolean binarySearch(T[] list, T item) {
+        return false;
+    }
+
+    public static void main(String[] args) {
+        X[] xs = new X[2];
+        xs[0] = new X();
+        xs[1] = new X();
+        binarySearch(xs,new X());
+    }
+}
+</pre>
+<li>Will the following code compile?
+<pre>
+class X implements Comparable&lt;X> {
+    public int compareTo(X o) { 
+        return 0;
+    }
+}
+class Y extends X { }
+public class Searcher {
+  
+    public static &lt;T extends Comparable&lt;T>> 
+    boolean binarySearch(T[] list, T item) {
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Y[] ys = new Y[2];
+        ys[0] = new Y();
+        ys[1] = new Y();
+        binarySearch(ys,new Y());
+    }
+}
+</pre>
+<li>Will the following code compile?
+<pre>
+class X implements Comparable&lt;X> {
+    public int compareTo(X o) { 
+        return 0;
+    }
+}
+class Z implements Comparable&lt;X> { }
+public class Searcher {
+  
+    public static &lt;T extends Comparable&lt;T>> 
+    boolean binarySearch(T[] list, T item) {
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Z[] zs = new Z[2];
+        zs[0] = new Z();
+        zs[1] = new Z();
+        binarySearch(zs,new Z());
+    }
+}
+</pre>
+<li>Will the following code compile?
+<pre>
+class X implements Comparable&lt;X> {
+    public int compareTo(X o) { 
+        return 0;
+    }
+}
+class Y extends X { } 
+class Z extends Y { }
+
+public class Searcher {
+  
+    public static &lt;T extends Comparable&lt;T>> 
+    boolean binarySearch(T[] list, T item) {
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Z[] zs = new Z[2];
+        zs[0] = new Z();
+        zs[1] = new Z();
+        binarySearch(zs,new Z());
+    }
+}
+</pre>
+</ol>
+<hr>
+
+<li>Suppose you built a Java library of sorting 
+algorithms:&nbsp; insertion sort, quicksort, and
+heapsort.&nbsp; You want to sell this library.&nbsp; How
+would you package your library <em>using interfaces</em>,
+so users could use any of
+these algorithms in their applications, and switch from
+using one to another (<em>interface polymorphism</em>),
+with the least amount of code rewrite? 
+
+<hr>
+
+<li><p>Aside from the <tt>java.lang.Comparable&lt;T&gt;</tt>
+interface used for comparing objects of a class, the
+<tt>java.util</tt> package has an interface,
+<tt>Comparator&lt;T&gt;</tt> that may also be used to compare
+objects. What is the difference between these two interfaces, and how
+may this difference be usefully employed in applications?
+</ol>
+</body>
+</html>
