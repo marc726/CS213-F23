@@ -1,6 +1,11 @@
 
-Java interfaces allow for the abstraction of method signatures without implementation. This problem set will challenge your understanding of interfaces and their applications in Java.
+### Terms: 
 
+1. What are interfaces? What do they do?
+
+2. What is `Comparable`? What does it do?
+
+---
 ### **Basic Implementation:**
 
 Given the following code snippet, identify if it will compile successfully:
@@ -17,6 +22,7 @@ public class Dog implements Animal {
 }
 ```
 
+---
 ### **Multiple Interfaces:**
 
 Will the code below compile? If not, what's the issue?
@@ -41,6 +47,7 @@ public class Athlete implements Swimmer, Runner {
 }
 ```
 
+---
 ### **Overlapping Methods:**
 
 Analyze the code snippet below. Will it compile?
@@ -61,6 +68,7 @@ public class Bat implements Mammal, Bird {
 }
 ```
 
+---
 ### **Abstract Class and Interface:**
 
 Consider the following code. Identify any compilation errors, if present:
@@ -85,6 +93,7 @@ public class Airplane extends Vehicle implements Flyable {
 }
 ```
 
+---
 ### **Interface Default Methods:**
 
 Examine the following code. Will it compile successfully? If not, correct the issues:
