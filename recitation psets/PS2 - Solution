@@ -1,0 +1,352 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>Problem Set 2 Solution</title>
+<style>
+body { font: 14px Trebuchet MS; }
+pre { color: blue; }
+code,tt { color: blue; }
+a, a:active { color: blue; }
+</style>
+</head><body>
+<center><h2>Problem Set 2 Solution</h2></center>
+<center><h3>Interfaces</h3></center>
+<hr>
+<ol>
+<li>Short questions
+<ol>
+<p><li>Will the following code compile?
+<pre>
+public class D { }
+
+public class C implements Comparable&lt;D> {
+   public int compareTo(D o) { return 0; }
+}
+</pre>
+<p><b>ANSWER</b>:
+
+<p>Yes.
+
+<li>Will the following code compile?
+<pre>
+public class D { }
+
+public class C implements Comparable&lt;C>, Comparable&lt;D> {
+   public int compareTo(C o) { return 0; }
+   public int compareTo(D o) { return 0; }
+}
+</pre>
+<p><b>ANSWER</b>:
+
+<p>No, you can't implement the same interface with different generic type arguments.
+
+<li>Will the following code compile?
+<pre>
+public class A implements Comparable&lt;A> {
+   public int compareTo(A o) { return 0; }
+}
+
+public class B extends A implements Comparable&lt;B> {
+   public int compareTo(B b) { return 0; }
+}
+</pre>
+<p><b>ANSWER</b>:
+
+<p>No, same as previous because when B extends A, it implicitly implements
+any interface(s) that A implements, namely Comparable&ltA>. So B ends
+up implementing Comparable twice, with A and B as generic type arguments,
+which is not allowed.
+
+<li>Will the following code compile?
+<pre>
+public interface I { void stuff(); }
+public interface J { void stuff(); }
+public class F implements I,J { }
+</pre>
+<p><b>ANSWER</b>:
+
+<p>No. F must implement methods of all the interfaces it implements.
+
+<li>Will the following code compile?
+<pre>
+public interface I { void stuff(); }
+public interface J { void stuff(); }
+public class F implements I,J { public void stuff() { } }
+</pre>
+<p><b>ANSWER</b>:
+
+<p>Yes.
+
+<p>
+<li>Will the following code compile?
+<pre>
+public interface I { int stuff(); }
+public interface J { void stuff(); }
+public class F implements I,J { public int stuff() { return 3;}}
+</pre>
+<p><b>ANSWER</b>:
+
+<p>No. Since the interface methods have the same name but different return types, there
+is no way for F to implement both without a naming conflict.
+
+<li>Will the following code compile?
+<pre>
+class X implements Comparable&lt;X> {
+    public int compareTo(X o) { 
+        return 0;
+    }
+}
+public class Searcher {
+  
+    public static &lt;T extends Comparable&lt;T>> 
+    boolean binarySearch(T[] list, T item) {
+        return false;
+    }
+
+    public static void main(String[] args) {
+        X[] xs = new X[2];
+        xs[0] = new X();
+        xs[1] = new X();
+        binarySearch(xs,new X());
+    }
+}
+</pre>
+<p><b>ANSWER</b>:
+
+Yes.
+
+<li>Will the following code compile?
+<pre>
+class X implements Comparable&lt;X> {
+    public int compareTo(X o) { 
+        return 0;
+    }
+}
+class Y extends X { }
+public class Searcher {
+  
+    public static &lt;T extends Comparable&lt;T>> 
+    boolean binarySearch(T[] list, T item) {
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Y[] ys = new Y[2];
+        ys[0] = new Y();
+        ys[1] = new Y();
+        binarySearch(ys,new Y());
+    }
+}
+</pre>
+<p><b>ANSWER</b>:
+
+Yes.
+
+<li>Will the following code compile?
+<pre>
+class X implements Comparable&lt;X> {
+    public int compareTo(X o) { 
+        return 0;
+    }
+}
+class Z implements Comparable&lt;X> { }
+public class Searcher {
+  
+    public static &lt;T extends Comparable&lt;T>> 
+    boolean binarySearch(T[] list, T item) {
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Z[] zs = new Z[2];
+        zs[0] = new Z();
+        zs[1] = new Z();
+        binarySearch(zs,new Z());
+    }
+}
+</pre>
+<p><b>ANSWER</b>:
+
+No. The type T that is required by the search must either itself implement
+Comparable&lt;T> or must have an ancestor in the inheritance hierarchy that
+implements Comparable&lt;T>. Z implements Comparable&lt;X>, but Z is not
+X, and neither is it a subclass of X.
+
+<li>Will the following code compile?
+<pre>
+class X implements Comparable&lt;X> {
+    public int compareTo(X o) { 
+        return 0;
+    }
+}
+class Y extends X { } 
+class Z extends Y { }
+
+public class Searcher {
+  
+    public static &lt;T extends Comparable&lt;T>> 
+    boolean binarySearch(T[] list, T item) {
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Z[] zs = new Z[2];
+        zs[0] = new Z();
+        zs[1] = new Z();
+        binarySearch(zs,new Z());
+    }
+}
+</pre>
+<p><b>ANSWER</b>:
+
+<p>Yes.
+
+</ol>
+
+<hr>
+
+<li>Suppose you built a Java library of sorting 
+algorithms:&nbsp; insertion sort, quicksort, and
+heapsort.&nbsp; You want to sell this library.&nbsp; How
+would you package your library <em>using interfaces</em>,
+so users could use any of
+these algorithms in their applications, and switch from
+using one to another (<em>interface polymorphism</em>),
+with the least amount of code rewrite? 
+
+<p><b>SOLUTION</b>
+<p>
+Write an interface called 
+                   <code>SortingAlgorithm</code> with one or more
+                   methods called <code>sort</code>, and then write
+                   various sorting classes for the different sorting
+                   algorithms, that implement the
+                   <code>SortingAlgorithm</code> interface.
+
+<pre>
+   // interface definition
+   public interface SortingAlgorithm&lt;T extends Comparable&lt;T>> {
+       void sort(T[] list);
+   }
+
+   /** sample implementations **/
+   public class InsertionSort&lt;T extends Comparable&lt;T>> 
+   implements SortingAlgorithm&lt;T> {   // note the syntax
+       public void sort(T[] list) {
+            ...  // implement insertion sort
+       }
+   }
+
+   public class Quicksort&lt;T extends Comparable&lt;T>> 
+   implements SortingAlgorithm&lt;T> {
+       public void sort(T[] list) {
+            ...  // implement quicksort
+       }
+   }
+   /** end sample implementations **/
+
+
+   /** application call examples, interface polymorphism **/
+   ...
+   // use insertion sort
+   SortingAlgorithm&lt;String> sort_algo = new InsertionSort&lt;String>();
+   sort_algo.sort(new String[]{"one","two","three"}); // anonymous array creation and initialization
+   ...
+   // morph to using quicksort, only sorting object creation needs to change
+   sort_algo = new Quicksort&lt;String>();   // plug-n-play
+   sort_algo.sort(new String[]{"one","two","three"});  // no change in this line
+
+   /** end application call examples **/
+
+</pre>
+<hr>
+
+<li><p>Aside from the <tt>java.lang.Comparable&lt;T&gt;</tt>
+interface used for comparing objects of a class, the
+<tt>java.util</tt> package has an interface,
+<tt>Comparator&lt;T&gt;</tt> that may also be used to compare
+objects. What is the difference between these two interfaces, and how
+may this difference be usefully employed in applications?
+<p><b>SOLUTION</b>
+<p>Here's an example of a simplified user-defined type:
+
+</p><pre>public class Customer {
+  private String firstName;
+  private String middleName;
+  private String lastName;
+
+  // setter &amp; getter methods..
+}
+</pre>
+
+In the above class, the most commonly <em>natural ordering</em> would
+be by <code>lastName</code>. This can easily be implemented using the 
+<code>Comparable&lt;T></code> interface, i.e.
+
+<pre>public class Customer implements Comparable&lt;Customer> {
+
+  public int compareTo (Customer c) {
+    
+    if (c == null) { return -1; // assuming you want null values shown last} 
+       
+    String cLastName = c.getLastName();
+    if (lastName == null &amp;&amp; cLastName == null) { return 0; }
+    // assuming you want null values shown last
+    if (lastName != null &amp;&amp; cLastName == null) { return -1; }
+    if (lastName == null &amp;&amp; cLastName != null) { return 1; }
+    return lastName.compareTo (cLastName);
+  }
+}
+
+</pre>
+
+Sorting a <code>List</code> of <code>Customer</code> objects would be as simple as:
+<pre>  Collections.sort (customerList); </pre>
+or, we could directly sort using the <code>List</code> interface <code>sort</code>
+method:
+<pre>
+  customerList.sort(null)  // calls default sort method of List
+</pre>
+Sending <tt>null</tt>
+as parameter is required if you want to sort based on <tt>compareTo</tt>.
+
+<p>But, if we want to use a different ordering, e.g. order by the first
+name, then we  cannot use the natural ordering as defined within the
+<code>Customer</code> class. Instead, we have to define an alternative ordering, in
+the form of a <code>Comparator</code> class.
+
+<pre>public class CustomerFirstNameComparator
+implements Comparator&lt;Customer> {
+
+  public int compare (Customer c1, Customer c2) {
+    if (c1 == null &amp;&amp; c2 == null) { return 0; }
+    // assuming you want null values shown last
+    if (c1 != null &amp;&amp; c2 == null) { return -1; }
+    if (c1 == null &amp;&amp; c2 != null) { return 1; }
+
+    String firstName1 = c1.getFirstName();
+    String firstName2 = c2.getFirstName();
+
+    if (firstName1 == null &amp;&amp; firstName2 == null) { return 0; }
+    // assuming you want null values shown last
+    if (firstName1 != null &amp;&amp; firstName2 == null) { return -1; }
+    if (firstName1 == null &amp;&amp; firstName2 != null) { return 1; }
+    return firstName1.compareTo (firstName2);
+  }
+}
+</pre>
+
+Sorting a <code>List</code> of <code>Customer</code> objects by their first name
+can then be done like this:
+<pre>  
+  Comparator&lt;Customer> comparator = new CustomerFirstNameComparator();
+  Collections.sort (customerList, comparator);
+</pre>
+Or, we could call <tt>sort</tt> directly on the list, and pass in the 
+<tt>Comparator</tt> object as a parameter:
+<pre>
+  customerList.sort(comparator); // calls default sort method of List
+</pre>
+
+</ol>
+</body></html>

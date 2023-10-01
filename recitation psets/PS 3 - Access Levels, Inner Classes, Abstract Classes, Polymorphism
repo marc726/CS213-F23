@@ -1,0 +1,236 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>CS 213 Fall 2021: Problem Set 3</title>
+<style>
+body { font: 14px Trebuchet MS; }
+pre { color: blue; }
+code,tt { color: blue; }
+a, a:active { color: blue; }
+</style>
+</head><body>
+<center><h2>Problem Set 3</h2></center>
+<center><h3>Access Levels, Inner Classes, Abstract Classes, Polymorphism</h3></center>
+<hr>
+<ol>
+<li>Access Levels
+
+<p>Suppose classes <tt>A</tt> and <tt>B</tt> are in package <tt>ab</tt>,
+and classes <tt>C</tt> and <tt>D</tt> are in package <tt>cd</tt>. Furthermore,
+both <tt>C</tt> and <tt>B</tt> extend <tt>A</tt>, and <tt>D</tt> extends 
+<tt>B</tt>. Assume all classes are declared to be <tt>public</tt>.
+<p><ol>
+<li>Are <code>protected</code> members of 
+  <code>A</code> accessible in 
+  <code>C</code>?&nbsp; If yes, explain how. If not, explain why.
+<li>Are <code>protected</code>
+  members of <code>A</code> accessible in
+  <code>D</code>?&nbsp; If yes, how? If not, why?
+<li>Answer the same question as in 1. replacing <tt>A</tt> with 
+  <code>B</code>
+<li>Answer the same question as in 2. replacing <tt>A</tt> with 
+  <code>B</code>
+</ol>
+<hr>
+<li>Inner Classes
+<p><ol>
+<li>Write a class named <tt>Outer</tt> that contains an inner
+class named Inner. Add a method to <tt>Outer</tt> that returns an
+object of type <tt>Inner</tt>.
+<tt>Outer</tt> has a private <tt>String</tt> field (initialized by the constructor),
+and <tt>Inner</tt> has a <tt>toString()</tt> that displays this
+field. 
+In <tt>main()</tt>, create and initialize a
+reference to an <tt>Inner</tt> and display it.
+<p><li>Write a class named <tt>Outer2</tt> that contains an
+    inner class named
+    <tt>Inner</tt>, and the <tt>Outer2</tt> class
+    itself has a method that returns an instance of the inner
+    class. In a separate class named
+    <tt>InnerApp</tt>, make an instance of the inner class
+    without creating an object of the outer
+    class.
+   </ol>
+   <hr>
+<li>Abstract Classes
+
+<p>For each of the following, tell whether the code will compile.
+If not, explain why.
+<ol>
+<li>
+<pre>
+  public abstract class X { }
+</pre>
+<li>
+<pre>
+  public class X {
+     public abstract void stuff();
+  }
+</pre>
+<li>
+<pre>
+  public abstract class X {
+     public abstract void stuff() { 
+        System.out.println("abstract");
+  }
+</pre>
+<li>
+<pre>
+  public abstract class X {
+     public void stuff() { 
+        System.out.println("go figure");
+  }
+</pre>
+<li>
+<pre>
+  public abstract class X {
+     public abstract void stuff();
+  }
+  public class Y extends X { }
+</pre>
+<li>
+<pre>
+  public interface I {
+     void stuff();
+  }
+  public abstract class X {
+     public abstract void stuff();
+  }
+
+  public class Y extends X implements I { 
+     public void stuff() { }
+  }
+</pre>
+<li>
+<pre>
+  public abstract class X {
+     private int i,j;
+     public void stuff1() { }
+     public void stuff2() { }
+  }
+</pre>
+<li>
+<pre>
+  public abstract class C {
+     public void write() {
+        System.out.println("C");
+     }
+     public static void main(String[] args) {
+        C c = new C().write();
+     }
+  }
+</pre>
+<li>
+<pre>
+  public abstract class C {
+     public abstract void write();
+  }
+  public class D extends C {
+     public void write() {
+        System.out.println("D");
+     }
+     public static void main(String[] args) {
+        C c = new D();
+        c.write();
+     }
+  }
+</pre>
+</ol>
+<hr>
+<li>
+<p>
+          There is an application that defines a <tt>Person</tt> class
+              and a <tt>Student</tt> class. The <tt>Student</tt> class is
+              defined as a subclass of <tt>Person</tt>.
+              Every person has a home address,
+              while every student has a school address as well. </p>
+
+        <p>Consider printing addresses of all people in the application, assuming there is
+a single array list that stores all <tt>Person</tt> and <tt>Student</tt> objects. How would
+the address that is printed for students depend on the way the <tt>Student</tt>
+class address methods are designed/implemented? What alternatives in design can you
+think of, and what are the pros and cons of these alternatives in printing the
+addresses?
+<hr>
+<li>This problem gives an example where polymorphism is useful. 
+      
+Consider the class hierarchy given below :
+<blockquote>
+<pre>public abstract class Shape implements Comparable&lt;Shape&gt; {
+
+    public void print() {
+        System.out.println("Shape");
+    }
+
+    public abstract double getArea();
+
+    public static final Shape biggest(Shape[] s)  {
+        /** TO BE COMPLETED BY YOU **/
+    }
+
+    ... // OTHER METHODS/FIELDS YOU MAY NEED TO ADD TO ANSWER THE QUESTION
+}
+
+public class Circle extends Shape {
+    double radius;
+
+    public Circle(double r) {
+        radius = r;
+    }
+    
+    public void print() {
+        System.out.println("Circle");
+    }
+
+    public double getArea() {
+        return Math.PI*radius*radius;
+    }
+}
+
+public class Rectangle extends Shape {
+
+    double height;
+    double length;
+
+    public Rectangle(double l,double h) {
+        length = l;
+        height = h;
+    }
+    
+    public void print() {
+        System.out.println("Rectangle");
+    }
+
+    public double getArea() {
+        return length*height;
+    }
+}
+
+public class App {
+
+    public static void main(String[] args) {
+        Shape[] s = new Shape[3];
+
+        s[0] = new Circle(7);
+        s[1] = new Rectangle(5,10);
+        s[2] = new Circle(4);
+        
+        System.out.println("The biggest area of all shapes is : "+Shape.biggest(s));
+        return;        
+    }
+}
+</pre>
+</blockquote>
+Complete the method
+<pre>    public static Shape biggest(Shape[] s)
+</pre>
+
+in the <code>Shape</code> class. This method should return the shape with
+            the largest area. Note that <code>Shape</code> implements the
+            <code>Comparable</code> interface.  Different
+	                <code>Shape</code>s should be compared using their area.
+			        
+			        Now if we extend the Shape hierarchy to include more shapes, say
+			        rhombus, then will your method run without any problems?
+</ol>
+</body></html>
